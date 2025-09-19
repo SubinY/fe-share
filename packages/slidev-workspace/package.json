@@ -1,0 +1,78 @@
+{
+  "name": "slidev-workspace",
+  "version": "0.1.11",
+  "description": "A workspace tool for managing multiple Slidev presentations with API-based content management",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/author/slidev-workspace#readme",
+  "bugs": {
+    "url": "https://github.com/author/slidev-workspace/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/author/slidev-workspace.git"
+  },
+  "author": "Author Name <author.name@mail.com>",
+  "bin": {
+    "slidev-workspace": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "scripts",
+    "src/preview",
+    "vite.config.ts"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./vite": "./dist/plugin-slides.js",
+    "./package.json": "./package.json",
+    "./scripts": "./scripts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "vite dev",
+    "dev:watch": "tsdown --watch",
+    "cli": "tsx src/cli.ts preview",
+    "test": "vitest",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "oxlint",
+    "format": "prettier --write src/"
+  },
+  "packageManager": "pnpm@9.15.3",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vueuse/core": "^13.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "0.544.0",
+    "tailwind-merge": "^3.3.1",
+    "tw-animate-css": "^1.3.5",
+    "vite": "^7.1.2",
+    "vue": "^3.5.17",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@prettier/plugin-oxc": "^0.0.4",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^22.15.32",
+    "@vue/tsconfig": "^0.7.0",
+    "jiti": "^2.4.2",
+    "npm-run-all2": "^8.0.4",
+    "oxlint": "~1.1.0",
+    "postcss": "^8.5.6",
+    "prettier": "3.5.3",
+    "tailwindcss": "^4.1.11",
+    "tsdown": "^0.11.9",
+    "typescript": "^5.8.3",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "vitest": "^3.1.3",
+    "vue-tsc": "^3.0.3"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.validate": ["javascript", "typescript", "vue"],
+  "prettier.requireConfig": true,
+  "unocss.root": ".",
+  "unocss.autocomplete.matchType": "fuzzy",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.suggest.insertMode": "replace",
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
+}
