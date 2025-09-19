@@ -14,7 +14,7 @@
   },
   "author": "Author Name <author.name@mail.com>",
   "bin": {
-    "slidev-workspace": "./dist/cli.js"
+    "slidev-workspace": "./dist/main.js"
   },
   "files": [
     "dist",
@@ -38,7 +38,10 @@
     "build": "tsdown",
     "dev": "vite dev",
     "dev:watch": "tsdown --watch",
-    "cli": "tsx src/cli.ts preview",
+    "cli:dev": "tsx src/scripts/main.ts preview:dev",
+    "cli:export": "tsx src/scripts/main.ts preview:export",
+    "cli:all": "tsx src/scripts/main.ts preview:all",
+    "cli:build": "tsx src/scripts/main.ts build",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit",
     "lint": "oxlint",

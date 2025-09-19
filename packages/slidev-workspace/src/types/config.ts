@@ -3,4 +3,5 @@ export interface SlidevWorkspaceConfig {
   outputDir: string
   baseUrl: string
   exclude: string[]
+  projectRoot: string
 }

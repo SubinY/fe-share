@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'fs'
 import { basename, join } from 'path'
 import { parse as parseYaml } from 'yaml'
-import type { SlideFrontmatter, SlideInfo } from '../types/slide.js'
+import type { SlideFrontmatter, SlideInfo } from '../../src/types/slide.js'
 import { loadConfig, resolveSlidesDirs } from './config.js'
 
 // Get the frontmatter and content of a single slide by ID

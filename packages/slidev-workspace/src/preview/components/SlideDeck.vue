@@ -19,7 +19,7 @@ const filteredSlides = computed(() => {
 })
 
 const openSlide = (slide: SlideData) => {
-  const url = new URL(slide.url, window.location.href)
+  const url = new URL(`/preview/${slide.url}`, window.location.href)
   window.open(url, '_blank')
 }
 </script>

@@ -1,16 +1,16 @@
 import { readFileSync, existsSync } from 'fs'
 import { join, resolve } from 'path'
 import { parse as parseYaml } from 'yaml'
-import type { SlidevWorkspaceConfig } from '../types/config.js'
+import type { SlidevWorkspaceConfig } from '../../types/config'
+import { findRootDir } from './findRootDir'
 
 const DEFAULT_CONFIG: SlidevWorkspaceConfig = {
   slidesDir: ['./slidevs'],
   outputDir: './dist',
   baseUrl: '/',
   exclude: ['node_modules', '.git'],
+  projectRoot: process.cwd(),
 }
-
-const args = process.argv.slice(2)
 
 export function loadConfig(workingDir?: string): SlidevWorkspaceConfig {
   const configPaths = [
@@ -20,14 +20,9 @@ export function loadConfig(workingDir?: string): SlidevWorkspaceConfig {
     'slidev-workspace.yaml',
   ]
 
-  // Use provided working directory, environment variable, or fallback to process.cwd()
-  let projectRoot = workingDir || process.env.SLIDEV_WORKSPACE_CWD || process.cwd()
+  const projectRoot = workingDir || findRootDir() || process.cwd()
 
-  if (args.includes('--basePath')) {
-    projectRoot = resolve(process.cwd(), '../../')
-    DEFAULT_CONFIG.slidesDir = [resolve(projectRoot, './slidevs')]
-    DEFAULT_CONFIG.outputDir = resolve(projectRoot, './dist')
-  }
+  DEFAULT_CONFIG.projectRoot = projectRoot
 
   for (const configPath of configPaths) {
     const fullPath = join(projectRoot, configPath)
@@ -51,22 +46,10 @@ export function loadConfig(workingDir?: string): SlidevWorkspaceConfig {
 }
 
 export function resolveSlidesDirs(config: SlidevWorkspaceConfig, workingDir?: string): string[] {
-  let projectRoot = workingDir || process.env.SLIDEV_WORKSPACE_CWD || process.cwd()
-
-  if (args.includes('--basePath')) {
-    projectRoot = resolve(process.cwd(), '../../')
-  }
+  const projectRoot = workingDir || config.projectRoot || process.cwd()
 
   const resolvedDirs = (config.slidesDir || [])
-    .map(dir => {
-      if (resolve(dir) === dir) {
-        // Absolute path
-        return dir
-      } else {
-        // Relative path
-        return resolve(projectRoot, dir)
-      }
-    })
+    .map(dir => resolve(projectRoot, dir))
     .filter(dir => {
       const exists = existsSync(dir)
       return exists

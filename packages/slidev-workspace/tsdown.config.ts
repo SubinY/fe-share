@@ -1,27 +1,28 @@
-import { defineConfig } from "tsdown";
+import { defineConfig } from 'tsdown'
 
 export default defineConfig([
   // Library build
   {
-    entry: ["./src/index.ts"],
-    platform: "node",
+    entry: ['./src/index.ts'],
+    platform: 'node',
     fromVite: true,
     dts: true,
-    external: ["fs", "path", "url", "yaml", "slidev:content"],
+    external: ['fs', 'path', 'url', 'yaml', 'slidev:content'],
   },
   // Vite plugin build
   {
-    entry: ["./src/vite/plugin-slides.ts"],
-    platform: "node",
+    entry: ['./src/vite/plugin-slides.ts'],
+    platform: 'node',
     fromVite: true,
     dts: true,
-    external: ["fs", "path", "url", "yaml", "slidev:content", "vite"],
+    external: ['fs', 'path', 'url', 'yaml', 'slidev:content', 'vite'],
   },
   // CLI build
   {
-    entry: ["./src/cli.ts"],
-    platform: "node",
-    outDir: "dist",
-    external: ["fs", "path", "url", "yaml", "slidev:content"],
+    entry: ['./src/scripts/main.ts'],
+    platform: 'node',
+    outDir: 'dist',
+    dts: true,
+    external: ['fs', 'path', 'url', 'yaml', 'slidev:content'],
   },
-]);
+])

@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { dirname, join } from 'path'
-import { parse as parseYaml } from 'yaml'
 import { fileURLToPath } from 'url'
+import { parse as parseYaml } from 'yaml'
 
 export function getBaseFromYaml() {
   try {

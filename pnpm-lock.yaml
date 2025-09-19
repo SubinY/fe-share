@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      slidev-workspace:
+        specifier: workspace:*
+        version: link:packages/slidev-workspace
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.22.0
@@ -177,6 +181,30 @@ importers:
       vue-tsc:
         specifier: ^3.0.3
         version: 3.0.7(typescript@5.9.2)
+
+  slidevs/0000-00-00:
+    dependencies:
+      '@slidev/theme-seriph':
+        specifier: ^0.25.0
+        version: 0.25.0
+      seedrandom:
+        specifier: ^3.0.5
+        version: 3.0.5
+      vue:
+        specifier: ^3.4.0
+        version: 3.5.21(typescript@5.9.2)
+
+  slidevs/0000-00-01:
+    dependencies:
+      '@slidev/theme-seriph':
+        specifier: ^0.25.0
+        version: 0.25.0
+      seedrandom:
+        specifier: ^3.0.5
+        version: 3.0.5
+      vue:
+        specifier: ^3.4.0
+        version: 3.5.21(typescript@5.9.2)
 
 packages:
 
@@ -1819,6 +1847,10 @@ packages:
 
   '@slidev/theme-default@0.25.0':
     resolution: {integrity: sha512-iWvthH1Ny+i6gTwRnEeeU+EiqsHC56UdEO45bqLSNmymRAOWkKUJ/M0o7iahLzHSXsiPu71B7C715WxqjXk2hw==}
+    engines: {node: '>=14.0.0', slidev: '>=v0.47.0'}
+
+  '@slidev/theme-seriph@0.25.0':
+    resolution: {integrity: sha512-PnFQbn4I70+/cVie5iAr0Im6sYvnwjkO7Yj5KonTyJZFFJFytckLTrD3ijft/J4cRnz7OmSzTyQKNX1FN/x0YQ==}
     engines: {node: '>=14.0.0', slidev: '>=v0.47.0'}
 
   '@slidev/types@0.47.5':
@@ -7468,6 +7500,12 @@ snapshots:
       roughjs: 4.6.6
 
   '@slidev/theme-default@0.25.0':
+    dependencies:
+      '@slidev/types': 0.47.5
+      codemirror-theme-vars: 0.1.2
+      prism-theme-vars: 0.2.5
+
+  '@slidev/theme-seriph@0.25.0':
     dependencies:
       '@slidev/types': 0.47.5
       codemirror-theme-vars: 0.1.2

@@ -4,15 +4,17 @@
   "private": true,
   "packageManager": "pnpm@9.5.0",
   "scripts": {
-    "dev": "pnpm run picker dev --open",
-    "build": "rimraf dist && pnpm run picker build",
+    "dev": "pnpm --filter slidev-workspace run cli:dev",
+    "preview": "pnpm --filter slidev-workspace run cli:all",
+    "export": "pnpm --filter slidev-workspace run cli:export",
+    "build": "rimraf dist && pnpm --filter slidev-workspace run cli:build",
     "build:all": "rimraf dist && pnpm -r run build",
-    "export": "pnpm run picker export",
-    "preview": "pnpm --filter slidev-workspace run cli --basePath",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint .",
-    "picker": "esno scripts/picker.ts",
     "prepare": "git submodule update --init --recursive"
+  },
+  "dependencies": {
+    "slidev-workspace": "workspace:*"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.22.0",

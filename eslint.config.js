@@ -13,6 +13,8 @@ export default antfu({
     'style/arrow-parens': 'off',
     'style/brace-style': 'warn',
     'unicorn/prefer-node-protocol': 'off',
+    'node/prefer-global/process': 'off',
+    'antfu/if-newline': 'off',
   },
   formatters: {
     css: true,

@@ -1,12 +1,13 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import prompts from 'prompts'
 import { execa } from 'execa'
+import { findRootDir } from '../utils/findRootDir'
 
-async function startPicker(args: string[]) {
-  const folders = (await fs.readdir(path.resolve(process.cwd(), 'slidevs'), { withFileTypes: true }))
+export async function runPreviewSingle(args: string[]) {
+  const rootCwd = findRootDir()
+
+  const folders = (await fs.readdir(path.resolve(rootCwd, 'slidevs'), { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
     .filter(folder => folder.match(/^\d{4}-/))
@@ -26,19 +27,9 @@ async function startPicker(args: string[]) {
   args = args.filter(arg => arg !== '-y')
 
   if (result.folder) {
-    if (args[0] === 'dev') {
-      const editor = process.env.PICKER_EDITOR
-      if (editor) {
-        console.log(`use editor ${editor} by env PICKER_EDITOR`)
-        execa(editor, [fileURLToPath(new URL(`../${result.folder}/src/slides.md`, import.meta.url))])
-      }
-    }
-
     await execa('pnpm', ['run', ...args], {
-      cwd: path.resolve(process.cwd(), 'slidevs', result.folder, 'src'),
+      cwd: path.resolve(rootCwd, 'slidevs', result.folder),
       stdio: 'inherit',
     })
   }
 }
-
-await startPicker(process.argv.slice(2))

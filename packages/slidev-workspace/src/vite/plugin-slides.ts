@@ -1,8 +1,8 @@
 import type { Plugin } from 'vite'
 import { watch, readdirSync, existsSync } from 'node:fs'
 import path from 'node:path'
-import { getAllSlidesFrontmatter } from '../scripts/getSlideFrontmatter.js'
-import { loadConfig, resolveSlidesDirs } from '../scripts/config.js'
+import { getAllSlidesFrontmatter } from '../scripts/utils/getSlideFrontmatter'
+import { loadConfig, resolveSlidesDirs } from '../scripts/utils/config'
 
 const args = process.argv.slice(2)
 
@@ -16,7 +16,6 @@ export function slidesPlugin(): Plugin {
       // Resolve slides directories at runtime, not build time
       const config = loadConfig()
       const slidesDirs = resolveSlidesDirs(config)
-
 
       // Watch for changes in all slides directories
       slidesDirs.forEach(slidesDir => {
