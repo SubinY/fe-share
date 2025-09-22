@@ -21,8 +21,10 @@ Commands:
 Examples:
   slidev-workspace preview:dev                            # Start development server
   slidev-workspace preview:build                          # Build the single slidev to package
+  slidev-workspace preview:export                         # Export the single slidev to package
   slidev-workspace preview:all                            # Build all slides and preview app
-  slidev-workspace build                                  # Build the Slidev Workspace project for production
+  slidev-workspace build --mode=default                   # Build the Slidev Workspace project for production with default mode
+  slidev-workspace build --mode=ipfs                      # Build the Slidev Workspace project for production with ipfs mode
 
 Configuration:
   Use slidev-workspace.yml to set baseUrl for all builds
@@ -40,14 +42,20 @@ async function main() {
       await runPreviewSingle(['export'])
       break
 
+    case 'preview:build':
+      await runPreviewSingle(['build'])
+      break
+
     case 'preview:all':
       await runPreviewAll()
       break
 
     case 'build':
+      // eslint-disable-next-line no-case-declarations
       const modeArg = args.find(arg => arg.startsWith('--mode='))
+      // eslint-disable-next-line no-case-declarations
       const mode = modeArg ? modeArg.split('=')[1] : 'default'
-      await runBuild(mode)
+      await runBuild(mode as 'default' | 'ipfs')
       break
 
     case 'help':

@@ -129,7 +129,7 @@ function genRedirectDir(viteConfig: any, mode: Mode) {
     if (!entry.isDirectory()) continue
     const name = entry.name
 
-    // 跳过不是以 0000-00-00- 开头的目录
+    // 跳过不是以 0000-00-00 格式 开头的目录
     if (!name.match(/^\d{4}-\d{2}-\d{2}/)) continue
 
     const dir = join(outRoot, name)
@@ -139,7 +139,6 @@ function genRedirectDir(viteConfig: any, mode: Mode) {
       const html = readFileSync(p, 'utf-8')
       writeFileSync(p, rewriteHtmlContent(html, name))
     }
-    console.log(base, join(outRoot, base, name), 'join(outRoot, base, name)')
     // 生成 preview 重定向页
     const previewDir = join(outRoot, base, name)
     writeRedirectHtml(previewDir, mode === 'ipfs' ? `../../${name}/` : `../../${name}/index.html`)
@@ -192,20 +191,13 @@ export async function runBuild(mode: 'default' | 'ipfs') {
   try {
     const slidesRaws = await buildAllSlides()
     const config = createViteConfig()
-    await build(config)
+    // 特殊处理，dist/index.html 的 base 需要是 /，不能在上方添加，否则会导致重定向失败
+    await build({ ...config, base: '/' })
 
     for (const slide of slidesRaws as any[]) {
       await copySlideDistToWorkspace(slide, config.build.outDir)
     }
     genRedirectDir(config, mode)
-
-    // 可选的 IPFS/Post-build 处理
-    // const deployTarget = process.env.SLIDEV_DEPLOY_TARGET || process.env.DEPLOY_TARGET
-    // if (deployTarget && deployTarget.toLowerCase() === 'ipfs') {
-    //   console.log('🔧 Post-processing for IPFS...')
-    //   postProcessForIpfs(config.build.outDir)
-    //   console.log('✅ IPFS post-processing done.')
-    // }
 
     // Copy everything to _gh-pages
     // await copyToGhPages()

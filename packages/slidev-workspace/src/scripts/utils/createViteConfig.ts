@@ -7,7 +7,6 @@ import { loadConfig } from './config'
 
 export function createViteConfig(plugins: Plugin[] = [], options: Record<string, any> = {}) {
   const config = loadConfig()
-  console.log(config, 'configconfig')
   const pluginRaw = [vue(), tailwindcss(), slidesPlugin(), ...plugins]
   const base = config.baseUrl
 

@@ -34,8 +34,6 @@ export function useSlides() {
     }))
   })
 
-  console.log(slides, 'slidesslides')
-
   const slidesCount = computed(() => slides.value.length)
 
   return {
