@@ -1,11 +1,13 @@
 import { execSync } from 'node:child_process'
-import { existsSync, mkdirSync, readdirSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs'
 import { cp } from 'node:fs/promises'
 import path, { join, resolve } from 'node:path'
 import { build } from 'vite'
 import { loadConfig, resolveSlidesDirs } from '../utils/config'
 import { createViteConfig } from '../utils/createViteConfig'
 import { findRootDir } from '../utils/findRootDir'
+
+type Mode = 'default' | 'ipfs'
 
 async function buildAllSlides() {
   return new Promise((resolve, reject) => {
@@ -66,8 +68,82 @@ async function copySlideDistToWorkspace(slide: { name: string; dir: string }, ou
   const to = resolve(outRoot, slide.name)
 
   if (!existsSync(from)) return
+
   mkdirSync(outRoot, { recursive: true })
   await cp(from, to, { recursive: true })
+
+  // const rootIndex = join(to, 'index.html')
+  // if (existsSync(rootIndex)) {
+  //   const html = readFileSync(rootIndex, 'utf-8')
+  //   writeFileSync(rootIndex, rewriteHtmlContent(html, slide.name))
+  // }
+}
+
+function rewriteHtmlContent(html: string, slug?: string) {
+  let output = html
+  // 根页面：/assets/ -> assets/
+  output = output.replace(/(href|src)="\/assets\//g, '$1="assets/')
+  if (slug) {
+    // 子目录页面：/slug/assets/ -> assets/
+    const escaped = slug.replace(/[-/\\]/g, m => `\\${m}`)
+    const pattern = new RegExp(`(href|src)="\/${escaped}\/assets\/`, 'g')
+    output = output.replace(pattern, '$1="assets/')
+  }
+  return output
+}
+
+function writeRedirectHtml(targetDir: string, redirectTo: string) {
+  const html = `
+  <!doctype html>
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0; url=${redirectTo}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redirecting…</title>
+    <script>
+      location.replace('${redirectTo}')
+    </script>
+  </head>
+  <body>
+   <a href="${redirectTo}">Redirecting to ${redirectTo}</a>
+  </body>
+</html>
+`
+  mkdirSync(targetDir, { recursive: true })
+  writeFileSync(join(targetDir, 'index.html'), html)
+}
+
+function genRedirectDir(viteConfig: any, mode: Mode) {
+  const { build, base } = viteConfig
+  const outRoot = build.outDir
+  // 处理根 index.html
+  const rootIndex = join(outRoot, 'index.html')
+  if (existsSync(rootIndex)) {
+    const html = readFileSync(rootIndex, 'utf-8')
+    writeFileSync(rootIndex, rewriteHtmlContent(html))
+  }
+
+  // 遍历一级子目录
+  const entries = readdirSync(outRoot, { withFileTypes: true })
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue
+    const name = entry.name
+
+    // 跳过不是以 0000-00-00- 开头的目录
+    if (!name.match(/^\d{4}-\d{2}-\d{2}/)) continue
+
+    const dir = join(outRoot, name)
+    for (const file of ['index.html', '404.html']) {
+      const p = join(dir, file)
+      if (!existsSync(p) || !statSync(p).isFile()) continue
+      const html = readFileSync(p, 'utf-8')
+      writeFileSync(p, rewriteHtmlContent(html, name))
+    }
+    console.log(base, join(outRoot, base, name), 'join(outRoot, base, name)')
+    // 生成 preview 重定向页
+    const previewDir = join(outRoot, base, name)
+    writeRedirectHtml(previewDir, mode === 'ipfs' ? `../../${name}/` : `../../${name}/index.html`)
+  }
 }
 
 async function copyToGhPages() {
@@ -112,15 +188,24 @@ async function copyToGhPages() {
   console.log('✅ All files copied to _gh-pages successfully!')
 }
 
-export async function runBuild() {
+export async function runBuild(mode: 'default' | 'ipfs') {
   try {
     const slidesRaws = await buildAllSlides()
-    const config = createViteConfig([], { base: '/' })
+    const config = createViteConfig()
     await build(config)
 
     for (const slide of slidesRaws as any[]) {
       await copySlideDistToWorkspace(slide, config.build.outDir)
     }
+    genRedirectDir(config, mode)
+
+    // 可选的 IPFS/Post-build 处理
+    // const deployTarget = process.env.SLIDEV_DEPLOY_TARGET || process.env.DEPLOY_TARGET
+    // if (deployTarget && deployTarget.toLowerCase() === 'ipfs') {
+    //   console.log('🔧 Post-processing for IPFS...')
+    //   postProcessForIpfs(config.build.outDir)
+    //   console.log('✅ IPFS post-processing done.')
+    // }
 
     // Copy everything to _gh-pages
     // await copyToGhPages()

@@ -30,6 +30,7 @@ Configuration:
 }
 
 async function main() {
+  console.log(command, 'commandcommand')
   switch (command) {
     case 'preview:dev':
       await runPreviewSingle(['dev'])
@@ -44,7 +45,9 @@ async function main() {
       break
 
     case 'build':
-      await runBuild()
+      const modeArg = args.find(arg => arg.startsWith('--mode='))
+      const mode = modeArg ? modeArg.split('=')[1] : 'default'
+      await runBuild(mode)
       break
 
     case 'help':

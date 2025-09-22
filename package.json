@@ -8,6 +8,7 @@
     "preview": "pnpm --filter slidev-workspace run cli:all",
     "export": "pnpm --filter slidev-workspace run cli:export",
     "build": "rimraf dist && pnpm --filter slidev-workspace run cli:build",
+    "build:ipfs": "rimraf dist && pnpm --filter slidev-workspace run cli:build:ipfs",
     "build:all": "rimraf dist && pnpm -r run build",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint .",

@@ -42,6 +42,7 @@
     "cli:export": "tsx src/scripts/main.ts preview:export",
     "cli:all": "tsx src/scripts/main.ts preview:all",
     "cli:build": "tsx src/scripts/main.ts build",
+    "cli:build:ipfs": "tsx src/scripts/main.ts build --mode=ipfs",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit",
     "lint": "oxlint",

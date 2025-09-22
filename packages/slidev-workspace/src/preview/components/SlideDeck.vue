@@ -19,6 +19,9 @@ const filteredSlides = computed(() => {
 })
 
 const openSlide = (slide: SlideData) => {
+  // 普通模式
+  // const url = new URL(`preview/${slide.url}/index.html`, window.location.href)
+  // IPFS 模式
   const url = new URL(`/preview/${slide.url}`, window.location.href)
   window.open(url, '_blank')
 }

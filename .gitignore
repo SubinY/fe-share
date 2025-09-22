@@ -1,9 +1,11 @@
 node_modules
 .DS_Store
 dist
+dist copy
 *.local
 .vite-inspect
 .remote-assets
 components.d.ts
 *.log
 *-export*
+temp
