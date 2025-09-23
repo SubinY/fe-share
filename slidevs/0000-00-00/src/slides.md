@@ -9,7 +9,7 @@ title: Vue3 Hook 深入解析
 info: |
   ## Vue3 Hook 深入解析
   从概念到实践的完整指南
-  
+
   涵盖Hook定义、框架对比、最佳实践等核心内容
 
   Learn more at [Sli.dev](https://sli.dev)
@@ -91,6 +91,7 @@ src: ./pages/07-best-practices.md
 
 ---
 src: ./pages/08-learning-resources.md
+---
 
 <!--
 Hook 主题幻灯片的自定义样式

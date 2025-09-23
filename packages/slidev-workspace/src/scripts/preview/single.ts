@@ -27,6 +27,16 @@ export async function runPreviewSingle(args: string[]) {
   args = args.filter(arg => arg !== '-y')
 
   if (result.folder) {
+    if (args.includes('build')) {
+      const distPath = path.resolve(rootCwd, 'slidevs', result.folder, 'dist')
+      try {
+        await fs.rm(distPath, { recursive: true, force: true })
+        console.log('remove dist folder')
+      } catch (e) {
+        console.log('remove dist folder failed', e)
+      }
+    }
+
     await execa('pnpm', ['run', ...args], {
       cwd: path.resolve(rootCwd, 'slidevs', result.folder),
       stdio: 'inherit',
